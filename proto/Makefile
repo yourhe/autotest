@@ -12,7 +12,7 @@ REWRITE_PROTO=$(REWRITE_PROTO_DIR)/rewrite.proto
 
 PKG=${GOPATH}/src/github.com/yourhe/grpc-gateway
 GO_PLUGIN=bin/protoc-gen-go
-GATEWAY_PLUGIN=$(PKG)/bin/protoc-gen-grpc-gateway
+GATEWAY_PLUGIN=$(GOPATH)/bin/protoc-gen-grpc-gateway
 SWAGGER_PLUGIN=${GOPATH}/bin/protoc-gen-swagger
 
 define BUILDPROTO
@@ -20,7 +20,8 @@ define BUILDPROTO
 			-I. \
 			-I$(1)/$(2) \
 			-I${GOPATH}/src \
-			-I${GOPATH}/src/github.com/yourhe/grpc-gateway/third_party/googleapis \
+			-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+			-I${GOPATH}/src/github.com/protocolbuffers/protobuf/src \
 			--go_out=plugins=grpc:${GOPATH}/src/. \
 			--plugin=$(GATEWAY_PLUGIN) \
 			--grpc-gateway_out=logtostderr=true:${GOPATH}/src/. \
