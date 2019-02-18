@@ -1,0 +1,117 @@
+syntax = "proto3";
+package autotest.protobuf;
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/yourhe/autotest/proto/stages;stages";
+// import "github.com/yourhe/grpc-gateway/policy/policy.proto";
+// import "gitlab.iyorhe.com/wfgz/reverseproxy/proto/autotest/report/report.proto";
+
+service StagesSvic {
+    rpc CreateStages(CreateStagesRequest) returns (CreateStagesResponse) {
+        option (google.api.http) = {
+            post: "/v1/test/stages"
+            body: "*"
+        };
+    }
+
+    rpc GetStages(SearchStagesRequest) returns (CreateStagesResponse) {
+        option (google.api.http) = {
+            get: "/v1/test/stages/{id}"
+        };
+    }
+
+    rpc ListStages(SearchStagesRequest) returns (CreateStagesResponse) {
+        option (google.api.http) = {
+            get: "/v1/test/stages"
+        };
+    }
+    
+    rpc UpdateStages(UpdateStagesRequest) returns (CreateStagesResponse) {
+        option (google.api.http) = {
+            put: "/v1/test/stages/{id}"
+            body: "*"
+        };
+    }
+
+    rpc RemoveStages(CreateStagesRequest) returns (CreateStagesResponse) {
+        option (google.api.http) = {
+            post: "/v1/test/stages"
+            body: "*"
+        };
+    }
+}
+
+message CreateStagesRequest {
+    string stages = 1;
+}
+
+message CreateStagesResponse {
+    string id = 1;
+}
+
+message SearchStagesRequest {
+    string id = 1;
+    
+    int32 limit = 3;
+    int32 offset = 4;
+}
+
+message SearchStagesResponse {
+    string id = 1;
+    int32 total = 2;
+    Stages stages = 3;
+}
+
+message UpdateStagesRequest {
+    string id = 1;
+    string raw = 2;
+}
+
+message UpdateStagesResponse {
+    string id = 1;
+    string msg = 2;
+}
+
+message RemoveStagesRequest {
+    string id = 1;
+}
+
+message RemoveStagesResponse {
+    string msg = 1;
+}
+
+
+
+enum State {
+    ok = 0;
+    fail = 1;
+}
+
+
+message Stages {
+    repeated Stage stages = 1;
+}
+
+message Stage {
+    string id = 1;
+    string description = 2;
+    repeated Action actions = 3;
+    State state = 4;
+    int32 line = 5;
+    string image = 6;
+    google.protobuf.Timestamp start_at = 7;
+    google.protobuf.Timestamp end_at = 8;
+    double time_elapsed = 9;
+}
+
+
+message Action {
+    string msg = 1;
+    string command = 2;
+    State state = 3;
+    int32 line = 4;
+    google.protobuf.Timestamp start_at = 5;
+    google.protobuf.Timestamp end_at = 6;
+    double time_elapsed = 7;
+}
